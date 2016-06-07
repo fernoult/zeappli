@@ -1,0 +1,17 @@
+[INFO] 06/06/2016 07:30:17,813 : Check Arguments : {0} arguments.
+[INFO] 06/06/2016 07:30:17,817 : Positionne le LAF.
+[INFO] 06/06/2016 07:30:18,764 : Demarrage de l'application.
+[INFO] 06/06/2016 07:30:18,773 : Check Already Running. port : 12000
+[INFO] 06/06/2016 07:30:18,774 : Positionne le LAF.
+[INFO] 06/06/2016 07:30:18,778 : Check Arguments : {0} arguments.
+[INFO] 06/06/2016 07:30:18,780 : Check Already Installed. path : false
+[INFO] 06/06/2016 07:32:50,684 : Tentative d'ajout d'un utilisateur.
+[SUCCES] 06/06/2016 07:32:50,687 : INSERT INTO t_users (user_login, user_firstname, user_lastname, user_email, user_phone, user_comp, is_staffer) VALUES(?, ?, ?, ?, ?, ?, TRUE);
+[INFO] 06/06/2016 07:32:50,689 : Fermeture du PreparedStatement.
+[INFO] 06/06/2016 07:32:50,691 : Fin du traitement.
+[INFO] 06/06/2016 07:33:40,006 : Tentative d'ajout d'un utilisateur.
+[SUCCES] 06/06/2016 07:33:40,008 : INSERT INTO t_users (user_login, user_firstname, user_lastname, user_email, user_phone, user_comp, is_staffer) VALUES(?, ?, ?, ?, ?, ?, TRUE);
+[INFO] 06/06/2016 07:33:40,010 : Fermeture du PreparedStatement.
+[INFO] 06/06/2016 07:33:40,011 : Fin du traitement.
+[INFO] 06/06/2016 07:33:57,263 : Fermeture de la base de donnees
+[INFO] 06/06/2016 07:33:57,266 : Fermeture du programme.

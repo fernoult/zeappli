@@ -1,0 +1,3 @@
+
+-- TEST SELECT USERS
+SELECT * FROM t_users;
