@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import javax.swing.JPanel;
 
-import fre.mmm.views.PrefsFrame;
+import fre.mmm.views.attributaires.PrefsFrame;
 
 public class AdminPane extends JPanel {
 

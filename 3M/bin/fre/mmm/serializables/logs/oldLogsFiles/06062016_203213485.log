@@ -1,9 +1,0 @@
-[INFO] 06/06/2016 07:34:46,090 : Check Arguments : {0} arguments.
-[INFO] 06/06/2016 07:34:46,095 : Positionne le LAF.
-[INFO] 06/06/2016 07:34:47,057 : Demarrage de l'application.
-[INFO] 06/06/2016 07:34:47,067 : Check Already Running. port : 12000
-[INFO] 06/06/2016 07:34:47,069 : Positionne le LAF.
-[INFO] 06/06/2016 07:34:47,071 : Check Arguments : {0} arguments.
-[INFO] 06/06/2016 07:34:47,072 : Check Already Installed. path : false
-[INFO] 06/06/2016 07:34:56,329 : Fermeture de la base de donnees
-[INFO] 06/06/2016 07:34:56,331 : Fermeture du programme.

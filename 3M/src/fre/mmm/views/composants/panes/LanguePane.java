@@ -23,8 +23,8 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import fre.mmm.resources.Resources;
-import fre.mmm.views.PrefsFrame;
 import fre.mmm.views.ViewsRessources;
+import fre.mmm.views.attributaires.PrefsFrame;
 import fre.mmm.views.composants.ElementEnum;
 import fre.mmm.views.composants.panes.elements.BTElement;
 import fre.mmm.views.composants.panes.elements.ElementFactory;

@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import fre.mmm.resources.Resources;
 import fre.mmm.views.composants.panes.LafPane;
+import fre.mmm.views.tabulaires.TabFrame;
 
 public class LafFrame extends TabFrame {
 

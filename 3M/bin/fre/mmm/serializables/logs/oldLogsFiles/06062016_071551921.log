@@ -1,8 +1,0 @@
-[INFO] 06/06/2016 07:13:49,722 : Check Arguments : {0} arguments.
-[INFO] 06/06/2016 07:13:49,757 : Positionne le LAF.
-[INFO] 06/06/2016 07:13:56,773 : Demarrage de l'application.
-[INFO] 06/06/2016 07:13:56,908 : Check Already Running. port : 12000
-[INFO] 06/06/2016 07:13:56,909 : Positionne le LAF.
-[INFO] 06/06/2016 07:13:56,911 : Check Arguments : {0} arguments.
-[INFO] 06/06/2016 07:13:56,912 : Check Already Installed. path : false
-[ERREUR] 06/06/2016 07:14:26,701 : java.lang.NullPointerException - null

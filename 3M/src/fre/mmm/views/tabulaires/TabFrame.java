@@ -1,21 +1,23 @@
-package fre.mmm.views;
+package fre.mmm.views.tabulaires;
 
 import java.awt.Toolkit;
 
 import javax.swing.WindowConstants;
 
 import fre.mmm.resources.Resources;
+import fre.mmm.views.AppFrame;
+import fre.mmm.views.ViewsRessources;
 
-public class ObjFrame extends AppFrame{
+public class TabFrame extends AppFrame {
 
-	public ObjFrame() {
+	public TabFrame() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	public ObjFrame(String title_){
+
+	public TabFrame(String title_){
 		super();
-		title_ = ViewsRessources.getInstance().getLibelleValue("frame.obj.title.text");
+		title_ = ViewsRessources.getInstance().getLibelleValue("frame.tab.title.text");
 		setTitle(title_);
 	}
 
@@ -24,9 +26,10 @@ public class ObjFrame extends AppFrame{
 		super.initPFrame();
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(ViewsRessources.getInstance().getImgsPath() 
-				+ Resources.getInstance().getSepProj() + "objet.png")));
+				+ Resources.getInstance().getSepProj() + "list.png")));
 		setSize(250, 200);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		
 	}
 	
 }

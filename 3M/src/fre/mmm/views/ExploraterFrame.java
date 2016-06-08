@@ -15,9 +15,12 @@ import javax.swing.JFrame;
 
 import fre.mmm.resources.Resources;
 import fre.mmm.resources.enums.EnumMessageDisplayer;
+import fre.mmm.views.attributaires.ObjFrame;
+import fre.mmm.views.attributaires.PrefsFrame;
 import fre.mmm.views.composants.ElementEnum;
 import fre.mmm.views.composants.panes.elements.ElementFactory;
 import fre.mmm.views.composants.panes.elements.RButton;
+import fre.mmm.views.tabulaires.TabFrame;
 
 /**
  * @author fre
@@ -79,8 +82,8 @@ public class ExploraterFrame extends AppFrame {
 	protected void initSize(){
 		
 		// On poisitionne la taille de l'explorateur.
-		_width = get_ressources().getSreenSize().width / 3;
-		_height = get_ressources().getSreenSize().height / 2;
+		_width = get_ressources().getSreenSize().width;
+		_height = get_ressources().getSreenSize().height;
 	}
 	
 	/*

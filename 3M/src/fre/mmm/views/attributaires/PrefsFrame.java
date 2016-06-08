@@ -1,4 +1,4 @@
-package fre.mmm.views;
+package fre.mmm.views.attributaires;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -17,6 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import fre.mmm.views.AppFrame;
+import fre.mmm.views.ExploraterFrame;
+import fre.mmm.views.LafFrame;
+import fre.mmm.views.PFrame;
+import fre.mmm.views.ViewsRessources;
 import fre.mmm.views.composants.ElementEnum;
 import fre.mmm.views.composants.panes.LanguePane;
 import fre.mmm.views.composants.panes.elements.ElementFactory;
