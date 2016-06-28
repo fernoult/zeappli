@@ -7,19 +7,29 @@
  */
 package fre.mmm.views;
 
+import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
+import fre.mmm.application.manager.ApplicationManager;
+import fre.mmm.model.Project;
 import fre.mmm.resources.Resources;
 import fre.mmm.resources.enums.EnumMessageDisplayer;
+import fre.mmm.views.attributaires.NewProjAttributeFrame;
 import fre.mmm.views.attributaires.ObjFrame;
 import fre.mmm.views.attributaires.PrefsFrame;
 import fre.mmm.views.composants.ElementEnum;
 import fre.mmm.views.composants.panes.elements.ElementFactory;
 import fre.mmm.views.composants.panes.elements.RButton;
+import fre.mmm.views.composants.panes.tabpanes.ProjectTab;
 import fre.mmm.views.tabulaires.TabFrame;
 
 /**
@@ -30,12 +40,9 @@ public class ExploraterFrame extends AppFrame {
 	
 	/** Le bouton de sortie de l'application. */
 	private RButton _exit;
-	
-	/** Bouton de creation d'une fenetre representative d'un objet. */
-	private RButton _newObj;
-	
-	/** Bouton de creation d'une fenetre qui liste des objets. */
-	private RButton _newList;
+
+	/** Le bouton de création d'un nouveau projet. */
+	private RButton _newProj;
 	
 	/** Bouton de creation de la fenetre des preferences. */
 	private RButton _prefs;
@@ -48,6 +55,10 @@ public class ExploraterFrame extends AppFrame {
 	
 	/** Instance de l'explorateur pour passage dans un listner. */
 	private ExploraterFrame _explo;
+	
+	private ApplicationManager _appliManager;
+	
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * 
@@ -82,8 +93,8 @@ public class ExploraterFrame extends AppFrame {
 	protected void initSize(){
 		
 		// On poisitionne la taille de l'explorateur.
-		_width = get_ressources().getSreenSize().width;
-		_height = get_ressources().getSreenSize().height;
+		_width = get_ressources().getSreenSize().width - 50;
+		_height = get_ressources().getSreenSize().height - 50;
 	}
 	
 	/*
@@ -96,6 +107,8 @@ public class ExploraterFrame extends AppFrame {
 		// Appel de l'init de la fenetre parente.
 		super.initPFrame();
 		
+		_appliManager = ApplicationManager.getInstance();
+		
 		// On instancie this.
 		// et init des composants.
 		_explo = this;
@@ -103,17 +116,19 @@ public class ExploraterFrame extends AppFrame {
 		initPanels();
 		
 		// On ajoute le panneau nord.
-		add(get_northPane());
+		add(get_northPane(), BorderLayout.NORTH);
+		add(_centerPane, BorderLayout.CENTER);
+		
 		
 		// Comportement de base de la fenetre.
 		// Taille, position sur l'ecran, comportement de fermeture.
 		setSize(_width, _height);
-		try {
-			setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(_ressources.getImgsPath() + Resources.getInstance().getSepProj() + _ressources.getPFrameLabel("explorater.icon.name"))));
-			
-		} catch (NullPointerException e) {
-			EnumMessageDisplayer.ERROR.displayException(e);
-		}
+//		try {
+//			setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(_ressources.getImgsPath() + Resources.getInstance().getSepProj() + _ressources.getPFrameLabel("explorater.icon.name"))));
+//
+//		} catch (NullPointerException e) {
+//			EnumMessageDisplayer.ERROR.displayException(e);
+//		}
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -127,6 +142,26 @@ public class ExploraterFrame extends AppFrame {
 		
 		// On initialise le panneau nord.
 		_northPane.add(_toolBar);
+		
+		// On initialise le panneau d'exploration 
+		// des projets.
+		tabbedPane = new JTabbedPane();
+		try {
+			if (_appliManager.getProjectManager().do_getNBProjects() != 0) {
+				ArrayList<Project> liste = _appliManager.getProjectManager().do_getProjects();
+				for (Iterator<Project> iterator = liste.iterator(); iterator.hasNext();) {
+					Project project = (Project) iterator.next();
+					JPanel pane = new ProjectTab(project);
+					tabbedPane.addTab(project.get_projectName(), pane);
+				}
+			}
+		} catch (Exception e) {
+			EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+		}
+		
+		_centerPane.add(tabbedPane);
+		
+		
 	}
 	
 	/*
@@ -149,31 +184,20 @@ public class ExploraterFrame extends AppFrame {
 			}
 		});
 		
-		_newObj = ElementFactory.getInstance().getButton(ElementEnum.ICON_BUTTON, 
-				_ressources.getLibelleButtonValues("explorateur.btn.attr.values"));
-		_newObj.addActionListener(new ActionListener() {
+		_newProj = ElementFactory.getInstance().getButton(ElementEnum.ICON_BUTTON, 
+				_ressources.getLibelleButtonValues("explorateur.btn.newproj.values"));
+		_newProj.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e_) {
 				
-				// On ouvre une nouvelle fenetre representative d'un objet.
-				ObjFrame objf = new ObjFrame("OBJ");
-				addFrame(objf);
+				// Ouvre une vue attributaire de cration d'un nouveau projet.
+				new NewProjAttributeFrame();
+				
+				// Cree un nouvel onglet initialisé avec les premieres donnees.
 			}
 		});
-		
-		_newList = ElementFactory.getInstance().getButton(ElementEnum.ICON_BUTTON, 
-				_ressources.getLibelleButtonValues("explorateur.btn.tab.values"));
-		_newList.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				// On ouvre une nouvelle fenetre qui liste des objets.
-				TabFrame tabf = new TabFrame("TAB");
-				addFrame(tabf);
-			}
-		});
+
 		
 		_prefs = ElementFactory.getInstance().getButton(ElementEnum.ICON_BUTTON, 
 				_ressources.getLibelleButtonValues("explorateur.btn.prefs.values"));
@@ -189,8 +213,7 @@ public class ExploraterFrame extends AppFrame {
 		// ============= TOOLBAR =================
 
 		_toolBar.add(_prefs);
-		_toolBar.add(_newObj);
-		_toolBar.add(_newList);
+		_toolBar.add(_newProj);
 		_toolBar.add(_exit);
 		
 	}

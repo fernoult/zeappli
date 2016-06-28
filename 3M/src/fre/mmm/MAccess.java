@@ -19,8 +19,8 @@ import fre.mmm.resources.enums.EnumMessageDisplayer;
 import fre.mmm.utils.ConfigUtils;
 import fre.mmm.utils.FilesUtils;
 import fre.mmm.utils.LogsUtils;
+import fre.mmm.views.ExploraterFrame;
 import fre.mmm.views.RunSplashScreen;
-import fre.mmm.views.tests.TestSimuFrame;
 import fre.prefs.PrefsGUI;
 
 
@@ -61,8 +61,8 @@ public class MAccess {
 		// On lance la fenetre de demarrage.
 	    RunSplashScreen splash = new RunSplashScreen(4000);
 	    splash.showSplashAndExit();	
-//		new ExploraterFrame("EXPLO");
-		new TestSimuFrame();
+		new ExploraterFrame("MMM_EXPLORATEUR");
+//		new TestSimuFrame();
 		
 		
 	}
@@ -203,10 +203,7 @@ public class MAccess {
 	}
 	
 	private static void initObjectsManager(){
-		
-		if (_isSimu) {
-			_applicationManager = ApplicationManager.getInstance(_isSimu);			
-		}
+		_applicationManager = ApplicationManager.getInstance();			
 	}
 	
 	private static void initLogManager(){

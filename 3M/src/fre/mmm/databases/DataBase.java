@@ -40,6 +40,10 @@ public interface DataBase {
 	
 	public abstract HashMap<String, Project> getProjectsMap() throws Exception;
 	
+	public abstract ArrayList<Project> getProjects() throws Exception;
+	
+	public abstract int getNBProjects() throws Exception;
+	
 	public abstract HashMap<Integer, User> getUsersMap() throws Exception;
 	
 

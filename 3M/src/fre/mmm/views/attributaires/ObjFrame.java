@@ -17,17 +17,17 @@ public class ObjFrame extends AppFrame{
 	
 	public ObjFrame(String title_){
 		super();
-		title_ = ViewsRessources.getInstance().getLibelleValue("frame.obj.title.text");
 		setTitle(title_);
 	}
 
 	@Override
 	protected void initPFrame() {
 		super.initPFrame();
-		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(ViewsRessources.getInstance().getImgsPath() 
-				+ Resources.getInstance().getSepProj() + "objet.png")));
+//		
+//		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(ViewsRessources.getInstance().getImgsPath() 
+//				+ Resources.getInstance().getSepProj() + "objet.png")));
 		setSize(250, 200);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 	

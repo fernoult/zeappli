@@ -78,7 +78,7 @@ public class TestUserFrame2 extends JFrame implements KeyListener, FocusListener
 	
 	public TestUserFrame2(){
 
-		_userManager = ApplicationManager.getInstance(false).getUserManager();
+		_userManager = ApplicationManager.getInstance().getUserManager();
 		initTestUsersFrame();
 
 	}

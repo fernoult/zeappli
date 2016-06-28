@@ -16,6 +16,8 @@ public class ProjetImpl implements Serializable, Project {
 	/** Le nom du projet (Aussi son ID) */
 	protected String _projectName;
 	
+	protected String _projectNum;
+	
 	/** L'ID du manager du projet */
 	protected Integer _projectIDManager;
 	
@@ -27,6 +29,8 @@ public class ProjetImpl implements Serializable, Project {
 	
 	/** le booleen */
 	protected boolean _destroyed;
+	
+	protected Integer _projectID;
 
 	/**
 	 * Constructeur.
@@ -53,6 +57,16 @@ public class ProjetImpl implements Serializable, Project {
 		super();
 	}
 
+	
+	@Override
+	public Integer get_projectID() {
+		return null;
+	}
+	
+	@Override
+	public void set_projectID(Integer projectID_) {
+	}
+	
 	/* (non-Javadoc)
 	 * @see fre.mmm.model.impl.Project#get_projectName()
 	 */
@@ -69,6 +83,15 @@ public class ProjetImpl implements Serializable, Project {
 		this._projectName = _projectName;
 	}
 
+	@Override
+	public String get_projectNum() {
+		return _projectNum;
+	}
+	
+	@Override
+	public void set_projectNum(String projectNum_) {
+		_projectNum = projectNum_;
+	}
 	/* (non-Javadoc)
 	 * @see fre.mmm.model.impl.Project#get_projectIDManager()
 	 */

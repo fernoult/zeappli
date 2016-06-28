@@ -37,6 +37,12 @@ public class DataBaseResources {
 		return req;
 	}
 	
+	public static String addProject(){
+		String req = "INSERT INTO t_projet (id_user, project_name, project_num, is_destroyed) " 
+						+ "VALUES (?, ?, ?, FALSE);";
+		return req;
+	}
+	
 	public static String selectLivrables(){
 		String req = "SELECT * FROM t_livrable";
 		return req;

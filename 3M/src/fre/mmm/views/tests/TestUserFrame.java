@@ -69,7 +69,7 @@ public class TestUserFrame extends JFrame {
 
 	public TestUserFrame(){
 
-		_userManager = ApplicationManager.getInstance(false).getUserManager();
+		_userManager = ApplicationManager.getInstance().getUserManager();
 		initTestUsersFrame();
 
 	}

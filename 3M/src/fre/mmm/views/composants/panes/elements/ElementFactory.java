@@ -38,8 +38,7 @@ public class ElementFactory {
 		
 		RButton button = new RButton();
 		try {
-			ImageIcon icone = new ImageIcon(getClass().getResource(ViewsRessources.getInstance().getImgsPath() 
-					+ Resources.getInstance().getSepProj() + values_[3]));
+			ImageIcon icone = Resources.getInstance().getAppliImage(values_[3]);
 			
 			button.setName(values_[0]);
 			button.setToolTipText(values_[2]);

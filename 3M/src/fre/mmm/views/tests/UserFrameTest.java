@@ -13,7 +13,7 @@
 //
 //import fre.mmm.application.manager.ApplicationManager;
 //import fre.mmm.application.manager.UsersManager;
-//import fre.mmm.application.manager.impl.local.UserManagerImpl;
+//import fre.mmm.application.manager.impl.UserManagerImpl;
 //import fre.mmm.resources.EnumMessageDisplayer;
 //
 //public class UserFrameTest extends JFrame{

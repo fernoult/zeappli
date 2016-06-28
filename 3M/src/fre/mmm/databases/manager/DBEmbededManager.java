@@ -24,6 +24,7 @@ import fre.mmm.model.Action;
 import fre.mmm.model.Livrable;
 import fre.mmm.model.Project;
 import fre.mmm.model.User;
+import fre.mmm.model.impl.ProjetImpl;
 import fre.mmm.model.impl.UserImpl;
 import fre.mmm.resources.Resources;
 import fre.mmm.resources.enums.EnumMessageDisplayer;
@@ -288,6 +289,22 @@ public class DBEmbededManager implements DataBase {
 
 	@Override
 	public void createProject(Project project_) throws Exception {
+		
+		EnumMessageDisplayer.INFO.logMessage("Tentative d'ajout d'un projet.");
+		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.addProject());
+		try {
+			prepaState.setInt(1, project_.get_projectIDManager());
+			prepaState.setString(2, project_.get_projectName());
+			prepaState.setString(3, project_.get_projectNum());
+			int statut = prepaState.executeUpdate();
+			EnumMessageDisplayer.SUCCES.logMessage(DataBaseResources.addProject());
+		} catch (SQLException e) {
+			EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			prepaState.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}
 	}
 
 	@Override
@@ -325,6 +342,50 @@ public class DBEmbededManager implements DataBase {
 	@Override
 	public HashMap<String, Project> getProjectsMap() throws Exception {
 		return null;
+	}
+	
+	@Override
+	public ArrayList<Project> getProjects() throws Exception {
+		
+		EnumMessageDisplayer.INFO.logMessage("Tentative de recupération des projets.");
+		
+		ArrayList<Project> list = new ArrayList<Project>();
+		
+		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.selectProjects());
+		ResultSet resus = prepaState.executeQuery();
+		
+		while (resus.next()) {
+			
+			Project projet = new ProjetImpl();
+			try {
+				projet.set_projectID(resus.getInt("id_projet"));
+				projet.set_projectIDManager(resus.getInt("id_user"));
+				projet.set_projectName(resus.getString("project_name"));
+				projet.set_projectNum(resus.getString("project_num"));
+				projet.set_destroyed(resus.getBoolean("is_destroyed"));
+				list.add(projet);
+				
+			} catch (SQLException e) {
+				EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+			}
+
+		}
+		return list;
+	}
+	
+	@Override
+	public int getNBProjects() throws Exception {
+		EnumMessageDisplayer.INFO.logMessage("Tentative de récupération du nombre de projets en BD.");
+		
+		int res = 0;
+		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.selectProjects());
+		ResultSet resus = prepaState.executeQuery();
+		
+		while (resus.next()) {
+			res++;
+
+		}
+		return res;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package fre.mmm.application.manager.impl.local;
+package fre.mmm.application.manager.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

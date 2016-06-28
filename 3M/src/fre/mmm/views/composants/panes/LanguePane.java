@@ -132,8 +132,7 @@ public class LanguePane extends JPanel {
 			String s = btTab[i].trim();
 			String[] tab = s.split("@");
 			
-			final RButton btn = new RButton(new ImageIcon(getClass().getResource(prefix 
-					+ Resources.getInstance().getSepProj()+ tab[3])));
+			final RButton btn = new RButton(Resources.getInstance().getAppliImage(prefix + tab[3]));
 			btn.setName(tab[0]);																				// On lui affecte un nom.
 			btn.setToolTipText(tab[1]);																		// On lui positionne un ToolTypeText.
 			btn.addActionListener(new ActionListener() {														// On positionne un ActionListner sur l'action du bouton

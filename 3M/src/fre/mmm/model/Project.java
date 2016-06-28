@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public interface Project {
 
+	public abstract Integer get_projectID();
+	
+	public abstract void set_projectID(Integer projectID_);
 	/**
 	 * <b>Methode:  fre.mmm.model.impl.get_projectName()</b><br/>
 	 * Retourne le nom (ID) du projet.
@@ -17,6 +20,10 @@ public interface Project {
 	 * @param _projectName void
 	 */
 	public abstract void set_projectName(String _projectName);
+	
+	public abstract String get_projectNum();
+	
+	public abstract void set_projectNum(String projectNum_);
 
 	/**
 	 * <b>Methode:  fre.mmm.model.impl.get_projectManager()</b><br/>
