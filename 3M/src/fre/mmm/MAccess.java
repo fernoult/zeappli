@@ -14,6 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import fre.mmm.application.manager.ApplicationManager;
 import fre.mmm.application.manager.InstallManager;
 import fre.mmm.conf.IConfig;
+import fre.mmm.databases.manager.DBEmbededManager;
 import fre.mmm.resources.Resources;
 import fre.mmm.resources.enums.EnumMessageDisplayer;
 import fre.mmm.utils.ConfigUtils;
@@ -169,7 +170,15 @@ public class MAccess {
 			case "simu":
 				_isSimu = true;
 				break;
-				
+			case "resetdb":
+				try {
+					DBEmbededManager.getInstance().dropShema();
+					Thread.sleep(1000);
+					DBEmbededManager.getInstance().initEmbededDB();
+				} catch (InterruptedException e) {
+					EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+				}
+				break;
 			default:
 				break;
 			}
@@ -184,7 +193,7 @@ public class MAccess {
 		try {
 			
 			// On positione le LAndFImpl par defaut.
-			UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+			UIManager.setLookAndFeel("com.jtattoo.plaf.fast.FastLookAndFeel");
 			
 			UIManager.put("ProgressBar.background", Color.WHITE);
 			UIManager.put("ProgressBar.foreground", Color.decode("#0B3861"));

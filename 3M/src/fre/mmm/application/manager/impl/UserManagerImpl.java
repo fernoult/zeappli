@@ -3,6 +3,8 @@ package fre.mmm.application.manager.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import fre.mmm.application.manager.ApplicationManager;
 import fre.mmm.application.manager.UsersManager;
 import fre.mmm.databases.DataBase;
@@ -42,10 +44,26 @@ public class UserManagerImpl implements UsersManager {
 	public void do_createUser(String lastName_, String firstName_, String login_, char[] passw_,
 			EnumRoles role_, String email_, String tel_, ArrayList<String> projectIDList_, ArrayList<Conge> congeList_)
 					throws Exception {
-		// On controle l'integrite des donnees
-		// a fournir a la BD pour la creation du user.
+		
 		User user = new UserImpl(null, firstName_, lastName_, login_, null, null, email_, tel_, null, null);
-		_dbInstance.createUser(user);
+		// On verifie si l'utilisateur n'existe 
+		// pas deja dans la BD
+		if (_dbInstance.isUserAlreadyExist(login_)) {
+			
+			if (!_dbInstance.isUserStaffed(login_)) {
+				user.set_staff(true);
+				_dbInstance.updateUser(user);
+			}else {
+				JOptionPane.showMessageDialog(null, "Utilisateur déjà enrgistré en BD", "USER CHECK INFO", 
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+
+		}else {
+			// On controle l'integrite des donnees
+			// a fournir a la BD pour la creation du user.
+			_dbInstance.createUser(user);
+			
+		}
 	}
 	
 	@Override
@@ -60,6 +78,7 @@ public class UserManagerImpl implements UsersManager {
 	
 	@Override
 	public void do_removeUser(String userLogin_) throws NullPointerException, Exception {
+		_dbInstance.removeUser(userLogin_);
 	}
 
 	@Override

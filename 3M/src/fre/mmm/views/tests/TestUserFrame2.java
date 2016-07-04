@@ -36,6 +36,7 @@ import fre.mmm.resources.Resources;
 import fre.mmm.resources.enums.EnumMessageDisplayer;
 import fre.mmm.views.composants.ZeTextField;
 import fre.mmm.views.utils.FormUtils;
+import fre.mmm.views.utils.SuccessPopup;
 
 public class TestUserFrame2 extends JFrame implements KeyListener, FocusListener{
 
@@ -177,7 +178,7 @@ public class TestUserFrame2 extends JFrame implements KeyListener, FocusListener
 			}
 			@Override
 			public void mouseClicked(MouseEvent e_) {
-				System.out.println("");
+				
 				try {
 					
 					if (submit.isEnabled()) {
@@ -188,6 +189,8 @@ public class TestUserFrame2 extends JFrame implements KeyListener, FocusListener
 										null, null, emailAdrr, telTF.getText(), null, null);
 								resetIhm();
 								enabledIhm(false);
+								JOptionPane.showMessageDialog(null, "Utilisateur ajouté.", "INFO ADD USER", JOptionPane.INFORMATION_MESSAGE);
+								
 							}else if (submit.getToolTipText().equals("Modifie l'utilisateur en BD")) {
 								_userManager.do_updateUser(buildUser(emailAdrr));
 								resetIhm();
@@ -202,6 +205,7 @@ public class TestUserFrame2 extends JFrame implements KeyListener, FocusListener
 				} catch (Exception e) {
 					e.printStackTrace();
 					EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+					EnumMessageDisplayer.ERROR.displayException(e);
 				}
 			}
 		});

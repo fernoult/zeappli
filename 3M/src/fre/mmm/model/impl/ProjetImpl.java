@@ -60,11 +60,12 @@ public class ProjetImpl implements Serializable, Project {
 	
 	@Override
 	public Integer get_projectID() {
-		return null;
+		return _projectID;
 	}
 	
 	@Override
 	public void set_projectID(Integer projectID_) {
+		_projectID = projectID_;
 	}
 	
 	/* (non-Javadoc)

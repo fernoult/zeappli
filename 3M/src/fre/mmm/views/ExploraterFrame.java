@@ -40,6 +40,9 @@ public class ExploraterFrame extends AppFrame {
 	
 	/** Le bouton de sortie de l'application. */
 	private RButton _exit;
+	
+	/** Supprime le projet */
+	private RButton _delete;
 
 	/** Le bouton de création d'un nouveau projet. */
 	private RButton _newProj;

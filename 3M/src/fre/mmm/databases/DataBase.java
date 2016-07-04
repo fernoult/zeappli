@@ -9,6 +9,10 @@ import fre.mmm.model.Project;
 import fre.mmm.model.User;
 
 public interface DataBase {
+	
+	public abstract boolean isUserAlreadyExist(String loginUser_) throws Exception;
+	
+	public abstract boolean isUserStaffed(String loginUser_) throws Exception;
 
 	public abstract void createUser(User user_) throws Exception;
 	
@@ -26,6 +30,10 @@ public interface DataBase {
 
 	public abstract void removeProject(String projectName_) throws Exception;
 
+	public abstract ArrayList<Project> getProjects() throws Exception;
+
+	public abstract Project getProjet(String projetName_) throws Exception;
+	
 	public abstract void createLivrable(Livrable livrable_) throws Exception;
 
 	public abstract void updateLivrable(Livrable livrable_) throws Exception;
@@ -40,7 +48,6 @@ public interface DataBase {
 	
 	public abstract HashMap<String, Project> getProjectsMap() throws Exception;
 	
-	public abstract ArrayList<Project> getProjects() throws Exception;
 	
 	public abstract int getNBProjects() throws Exception;
 	

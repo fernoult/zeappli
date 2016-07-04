@@ -187,6 +187,61 @@ public class DBEmbededManager implements DataBase {
 	}
 	
 	@Override
+	public boolean isUserAlreadyExist(String loginUser_) throws Exception {
+		
+		EnumMessageDisplayer.INFO.logMessage("Test si l'utilisateur existe.");
+		PreparedStatement preparedState = _connexion.prepareStatement(DataBaseResources.selectUserCount());
+		ResultSet retour = null;
+		boolean ret = false;
+		try {
+			
+			preparedState.setString(1, loginUser_);
+			retour = preparedState.executeQuery();
+			if (retour.getRow() != 0) {
+				ret = true;				
+			}
+			
+		} catch (SQLException e) {
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());
+		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			retour.close();
+			preparedState.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}
+		return ret;
+	}
+	
+	@Override
+	public boolean isUserStaffed(String loginUser_) throws Exception {
+		
+		EnumMessageDisplayer.INFO.logMessage("Test si l'utilisateur existe.");
+		PreparedStatement preparedState = _connexion.prepareStatement(DataBaseResources.selectUserIsDestroyed());
+		ResultSet retour = null;
+		boolean ret = false;
+		try {
+			
+			preparedState.setString(1, loginUser_);
+			retour = preparedState.executeQuery();
+			
+			ret = retour.getBoolean("is_staffed");
+						
+		} catch (SQLException e) {
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());
+		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			retour.close();
+			preparedState.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}
+		return ret;
+	}
+	
+	@Override
 	public void createUser(User user_) throws Exception {
 		
 		EnumMessageDisplayer.INFO.logMessage("Tentative d'ajout d'un utilisateur.");
@@ -198,14 +253,13 @@ public class DBEmbededManager implements DataBase {
 			prepaState.setString(4, user_.get_userEmail());
 			prepaState.setString(5, user_.get_userTel());
 			prepaState.setString(6, "NO COMPAGNY");
+			prepaState.setBoolean(7, true);
 			System.out.println("");
 			int statut = prepaState.executeUpdate();
 			EnumMessageDisplayer.SUCCES.logMessage(DataBaseResources.addUser());
 		} catch (SQLException e) {
 			EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
 		} finally {
-			
-			
 			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
 			prepaState.close();
 			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
@@ -234,57 +288,139 @@ public class DBEmbededManager implements DataBase {
 				user.set_userLastName((String) retour.getObject("user_firstname"));
 				user.set_userEmail((String) retour.getObject("user_email"));
 				user.set_userTel((String) retour.getObject("user_phone"));
+				user.set_staff(retour.getBoolean("is_staffer"));
 			}
 			if (retour.getRow() == 0) { // TODO Ca c'est degueulasse
 				user = null;
 			}
 		} catch (SQLException e) {
 			user = null;
-			EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
-			throw new Exception(e);
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Echec de la tentative de récupération d'un utilisateur.\n"
+					+ "Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());
 		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
 			retour.close();
 			preparedStatement.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
 		}
-
-		return user;
+		if (user.is_staff() == true) {
+			return user;			
+		}else {
+			return null;
+		}
 	}
 
 	@Override
 	public ArrayList<User> getUsers() throws Exception {
-		
+
+		EnumMessageDisplayer.INFO.logMessage("Tentative de récupération de tous les utilisteurs enregistres.");
 		ArrayList<User> list = new ArrayList<User>();
-		
+
 		PreparedStatement preparedStatement = _connexion.prepareStatement(DataBaseResources.selectUsers());
 		ResultSet retour = preparedStatement.executeQuery();
-		
-		while (retour.next()) {
-			
-			User user = new UserImpl();
-			try {
+
+
+		try {
+			while (retour.next()) {
+				User user = new UserImpl();
 				user.set_userID(retour.getInt("id_user"));
 				user.set_userLogin(retour.getString(2));
 				user.set_userFirstName(retour.getString(3));
 				user.set_userLastName(retour.getString(4));
 				user.set_userEmail(retour.getString(5));
 				user.set_userTel(retour.getString(6));
-				list.add(user);
-				
-			} catch (SQLException e) {
-				EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+				user.set_staff(retour.getBoolean("is_staffer"));
+
+				if (user.is_staff() == true) {
+					list.add(user);						
+				}
 			}
 
-		}
+			// Tout s'est bien passe, on log pour info.
+			EnumMessageDisplayer.SUCCES.logMessage("Y a tout le monde.");
+		} catch (SQLException e) {
+			list = null;
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Echec de la tentative de récupération de tous les utilisateurs.\n"
+					+ "Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());// TODO Faire des Properties pour ca.
+		}	finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			retour.close();
+			preparedStatement.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}			
+
+
 		return list;
 	}
 	
 	@Override
 	public void updateUser(User user_) throws Exception {
 		
+		EnumMessageDisplayer.INFO.logMessage("Tentative de modification d'un utilisateur..");
+		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.updateUser());
+		
+		try {
+			
+			prepaState.setString(1, user_.get_userLogin());
+			prepaState.setString(2, user_.get_userFirstName());
+			prepaState.setString(3, user_.get_userLastName());
+			prepaState.setString(4, user_.get_userEmail());
+			prepaState.setString(5, user_.get_userTel());
+			prepaState.setString(6, "NO COMPAGNY");
+			prepaState.setBoolean(7, false);
+			prepaState.setInt(8, user_.get_userID());
+			
+			// Tout s'est bien passe, on log pour info.
+			EnumMessageDisplayer.SUCCES.logMessage("Utilisateur modifié.");
+		} catch (SQLException e) {
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Echec de la tentative de modification de l'utilisateur.\n"
+					+ "Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());// TODO Faire des Properties pour ca.
+		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			prepaState.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}
 	}
 
 	@Override
 	public void removeUser(String userLogin_) throws Exception {
+		
+		EnumMessageDisplayer.INFO.logMessage("Tentative de suppression d'un utilisateur.");
+		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.updateUser());
+		
+		try {
+			User user = getUser(userLogin_);
+			prepaState.setString(1, user.get_userLogin());
+			prepaState.setString(2, user.get_userFirstName());
+			prepaState.setString(3, user.get_userLastName());
+			prepaState.setString(4, user.get_userEmail());
+			prepaState.setString(5, user.get_userTel());
+			prepaState.setString(6, "NO COMPAGNY");
+			prepaState.setBoolean(7, false);
+			prepaState.setInt(8, user.get_userID());
+			
+			prepaState.executeUpdate();
+			
+			// Tout s'est bien passe, on log pour info.
+			EnumMessageDisplayer.SUCCES.logMessage("Utilisateur supprimé.");
+			
+		} catch (SQLException e) {
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Echec de la tentative de suppression de l'utilisateur.\n"
+					+ "Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());// TODO Faire des Properties pour ca.
+		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			prepaState.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}
+		
 	}
 
 	@Override
@@ -296,10 +432,15 @@ public class DBEmbededManager implements DataBase {
 			prepaState.setInt(1, project_.get_projectIDManager());
 			prepaState.setString(2, project_.get_projectName());
 			prepaState.setString(3, project_.get_projectNum());
+			prepaState.setBoolean(4, false);
 			int statut = prepaState.executeUpdate();
 			EnumMessageDisplayer.SUCCES.logMessage(DataBaseResources.addProject());
 		} catch (SQLException e) {
-			EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Echec de la tentative d'ajout d'un projet.\n"
+					+ "Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());// TODO Faire des Properties pour ca.
+			
 		} finally {
 			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
 			prepaState.close();
@@ -313,6 +454,103 @@ public class DBEmbededManager implements DataBase {
 
 	@Override
 	public void removeProject(String projectName_) throws Exception {
+		
+		EnumMessageDisplayer.INFO.logMessage("Tentative de suppression d'un projet.");
+		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.updateProject());
+		
+		try {
+			Project projet = getProjet(projectName_);
+			prepaState.setInt(1, projet.get_projectIDManager());
+			prepaState.setString(2, projet.get_projectName());
+			prepaState.setString(3, projet.get_projectNum());
+			prepaState.setBoolean(4, true);
+			prepaState.setInt(5, projet.get_projectID());
+			
+			// Tout s'est bien passe, on log pour info.
+			EnumMessageDisplayer.SUCCES.logMessage("Projet supprimé.");
+			
+		} catch (SQLException e) {
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Echec de la tentative de suppression de l'utilisateur.\n"
+					+ "Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());// TODO Faire des Properties pour ca.
+		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			prepaState.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}
+	}
+
+	@Override
+	public ArrayList<Project> getProjects() throws Exception {
+		
+		EnumMessageDisplayer.INFO.logMessage("Tentative de recupération des projets.");
+		
+		ArrayList<Project> list = new ArrayList<Project>();
+		
+		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.selectProjects());
+		ResultSet resus = prepaState.executeQuery();
+		
+		while (resus.next()) {
+			
+			if (resus.getBoolean("is_destroyed") == false) {
+				Project projet = new ProjetImpl();
+				try {
+					projet.set_projectID(resus.getInt("id_projet"));
+					projet.set_projectIDManager(resus.getInt("id_user"));
+					projet.set_projectName(resus.getString("project_name"));
+					projet.set_projectNum(resus.getString("project_num"));
+					projet.set_destroyed(resus.getBoolean("is_destroyed"));
+					if (!projet.is_destroyed()) {
+						list.add(projet);						
+					}
+					
+				} catch (SQLException e) {
+					EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+				}				
+			}
+			
+		}
+		return list;
+	}
+	
+	@Override
+	public Project getProjet(String projetName_) throws Exception {
+		
+		//TODO Comment on gere les erreurs SQL? 
+		// https://openclassrooms.com/courses/developpez-des-sites-web-avec-java-ee/gerer-les-erreurs-avec-son-dao
+		ProjetImpl projet = new ProjetImpl();
+		PreparedStatement preparedStatement = null;
+		ResultSet retour = null;
+		try {
+			preparedStatement = _connexion.prepareStatement(DataBaseResources.selectProjectWithProjectName());
+			preparedStatement.setString(1, projetName_);
+			retour = preparedStatement.executeQuery();
+
+			while (retour.next()) {
+				projet.set_projectID(retour.getInt("id_projet"));
+				projet.set_projectIDManager(retour.getInt("id_user"));
+				projet.set_projectName(retour.getString("project_name"));
+				projet.set_projectNum(retour.getString("project_num"));
+				projet.set_destroyed(retour.getBoolean("is_destroyed"));
+			}
+			if (retour.getRow() == 0) { // TODO Ca c'est degueulasse
+				projet = null;
+			}
+		} catch (SQLException e) {
+			projet = null;
+			EnumMessageDisplayer.ERROR.logMessage(e.getErrorCode() + " | " + e.getMessage());
+			throw new Exception("Echec de la tentative de récupération du projet.\n"
+					+ "Erreur SQL niveau Base de données.\n"
+					+ "Code erreur SQL : " + e.getErrorCode());
+		} finally {
+			EnumMessageDisplayer.INFO.logMessage("Fermeture du PreparedStatement.");
+			retour.close();
+			preparedStatement.close();
+			EnumMessageDisplayer.INFO.logMessage("Fin du traitement.");
+		}
+
+		return projet;
 	}
 
 	@Override
@@ -344,34 +582,6 @@ public class DBEmbededManager implements DataBase {
 		return null;
 	}
 	
-	@Override
-	public ArrayList<Project> getProjects() throws Exception {
-		
-		EnumMessageDisplayer.INFO.logMessage("Tentative de recupération des projets.");
-		
-		ArrayList<Project> list = new ArrayList<Project>();
-		
-		PreparedStatement prepaState = _connexion.prepareStatement(DataBaseResources.selectProjects());
-		ResultSet resus = prepaState.executeQuery();
-		
-		while (resus.next()) {
-			
-			Project projet = new ProjetImpl();
-			try {
-				projet.set_projectID(resus.getInt("id_projet"));
-				projet.set_projectIDManager(resus.getInt("id_user"));
-				projet.set_projectName(resus.getString("project_name"));
-				projet.set_projectNum(resus.getString("project_num"));
-				projet.set_destroyed(resus.getBoolean("is_destroyed"));
-				list.add(projet);
-				
-			} catch (SQLException e) {
-				EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
-			}
-
-		}
-		return list;
-	}
 	
 	@Override
 	public int getNBProjects() throws Exception {

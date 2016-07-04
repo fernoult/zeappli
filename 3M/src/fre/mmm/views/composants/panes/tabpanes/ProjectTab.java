@@ -12,8 +12,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import fre.mmm.application.manager.ApplicationManager;
 import fre.mmm.model.Project;
 import fre.mmm.resources.Resources;
+import fre.mmm.resources.enums.EnumMessageDisplayer;
+import fre.mmm.views.composants.ElementEnum;
+import fre.mmm.views.composants.panes.elements.ElementFactory;
+import fre.mmm.views.composants.panes.elements.RButton;
 import fre.mmm.views.tests.TestUserFrame2;
 
 public class ProjectTab extends JPanel implements MouseListener {
@@ -27,6 +32,8 @@ public class ProjectTab extends JPanel implements MouseListener {
 	private Project _projet;
 	
 	private JButton _users;
+	
+	private RButton _deleteProj;
 	
 	
 	/**
@@ -83,8 +90,9 @@ public class ProjectTab extends JPanel implements MouseListener {
 		_toolLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		_toolLeftPanel.add(_descriptifProjet);
 		
-		_toolRightPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		_toolRightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		_toolRightPanel.add(_users);
+		_toolRightPanel.add(_deleteProj);
 		
 		_toolPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		_toolPanel.add(_toolLeftPanel);
@@ -101,6 +109,20 @@ public class ProjectTab extends JPanel implements MouseListener {
 			@Override
 			public void actionPerformed(ActionEvent e_) {
 				new TestUserFrame2();
+			}
+		});
+		
+		_deleteProj = ElementFactory.getInstance().getButton(ElementEnum.ICON_BUTTON, 
+				Resources.getInstance().getAppliLabel("projets.btn.delete.values").split("@"));
+		_deleteProj.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e_) {
+				try {
+					ApplicationManager.getInstance().getProjectManager().do_removeProject(_projet.get_projectName());
+				} catch (Exception e) {
+					EnumMessageDisplayer.ERROR.logMessage(e.getMessage());
+					EnumMessageDisplayer.ERROR.displayException(e);
+				}
 			}
 		});
 		

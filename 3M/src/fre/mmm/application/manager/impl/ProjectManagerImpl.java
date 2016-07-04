@@ -48,6 +48,11 @@ public class ProjectManagerImpl implements ProjectsManager {
 	}
 	
 	@Override
+	public void do_removeProject(String projectName_) throws Exception {
+		_dbInstance.removeProject(projectName_);
+	}
+	
+	@Override
 	public Project do_getProject(String projectName_) throws Exception {
 		return null;
 	}
